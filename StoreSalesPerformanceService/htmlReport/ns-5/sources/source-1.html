@@ -1,0 +1,180 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > SalesPerformanceService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.mock.service</a>
+</div>
+
+<h1>Coverage Summary for Class: SalesPerformanceService (com.mock.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SalesPerformanceService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    70%
+  </span>
+  <span class="absValue">
+    (7/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (17/17)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;
+&nbsp;package com.mock.service;
+&nbsp;
+&nbsp;import java.math.BigDecimal;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Comparator;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;import com.mock.bean.StoreReport;
+&nbsp;import com.mock.bean.Stores;
+&nbsp;import com.mock.bean.TopStores;
+&nbsp;import com.mock.constant.SalesPerformanceConstant;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;/**
+&nbsp; * Utility class it contain all helper logic.
+&nbsp; * 
+&nbsp; * @author Muruganand
+&nbsp; *
+&nbsp; */
+&nbsp;@Service
+<b class="fc">&nbsp;public class SalesPerformanceService {</b>
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * This method calculate the revenue and rating from storeinput and generate the
+&nbsp;	 * store reports.
+&nbsp;	 * 
+&nbsp;	 * @param stores
+&nbsp;	 * @return storeReportList
+&nbsp;	 */
+&nbsp;	public List&lt;StoreReport&gt; generateStoreReports(List&lt;Stores&gt; stores) {
+<b class="fc">&nbsp;		List&lt;StoreReport&gt; storeReportList = new ArrayList&lt;StoreReport&gt;();</b>
+<b class="fc">&nbsp;		storeReportList = stores.stream().map(input -&gt; {</b>
+<b class="fc">&nbsp;            BigDecimal revenue=BigDecimal.ZERO;</b>
+<b class="fc">&nbsp;            String rating=SalesPerformanceConstant.NONE;</b>
+<b class="pc">&nbsp;            if(input.getTotalSales()!=null &amp;&amp; input.getReturns()!=null) {</b>
+&nbsp;                // Calculate revenue
+<b class="fc">&nbsp;                revenue = input.getTotalSales().subtract(input.getReturns());</b>
+&nbsp;                // Determine rating
+<b class="fc">&nbsp;                rating = (revenue.compareTo(BigDecimal.valueOf(10000)) &lt; 0) ? SalesPerformanceConstant.POOR</b>
+<b class="fc">&nbsp;                        : (revenue.compareTo(BigDecimal.valueOf(50000)) &lt;= 0) ? SalesPerformanceConstant.AVERAGE : SalesPerformanceConstant.EXCELLENT;</b>
+&nbsp;            }
+&nbsp;            // Transform to Output Bean
+<b class="fc">&nbsp;			return new StoreReport(input.getId(), input.getName(), revenue, rating);</b>
+<b class="fc">&nbsp;		}).sorted(Comparator.comparing(StoreReport::getRevenue).reversed()).toList();</b>
+<b class="fc">&nbsp;		return storeReportList;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * This method return top 2 store list.
+&nbsp;	 * 
+&nbsp;	 * @param storeReports
+&nbsp;	 * @return topCustomer
+&nbsp;	 */
+&nbsp;	public List&lt;TopStores&gt; generateTopStoreReports(List&lt;StoreReport&gt; storeReports) {
+<b class="fc">&nbsp;		List&lt;TopStores&gt; topCustomer = null;</b>
+<b class="pc">&nbsp;		if (!storeReports.isEmpty()) {</b>
+<b class="fc">&nbsp;			topCustomer = storeReports.stream().map(c -&gt; new TopStores(c.getId(), c.getName(), c.getRevenue()))</b>
+<b class="fc">&nbsp;					.sorted(Comparator.comparing(TopStores::getRevenue).reversed()).limit(2).toList();</b>
+&nbsp;		}
+<b class="fc">&nbsp;		return topCustomer;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-01-08 12:31</div>
+</div>
+</body>
+</html>
